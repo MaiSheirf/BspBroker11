@@ -22,11 +22,32 @@ public class EsbServiceInf {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "SERVICE_ID")
     private String serviceID ;
+
     @Column(name = "SERVICE_NAME")
     private  String serviceName;
 
     @Column(name ="ISREADABLE")
     private int isReadable ;
+
+    @Column(name ="service_operation")
+    private String serviceOperation ;
+
+    @Column(name ="service_key1_path")
+    private String key1Path;
+
+    @Column(name ="service_key2_path")
+    private String key2Path;
+
+    @Column(name ="service_key3_path")
+    private String key3Path;
+
+    @Column(name ="service_key4_path")
+    private String key4Path;
+
+    @Column(name ="service_key5_path")
+    private String key5Path;
+
+
 
     public int getIsReadable() {
         return isReadable;

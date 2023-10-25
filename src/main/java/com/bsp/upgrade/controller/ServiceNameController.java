@@ -12,12 +12,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/serinfo")
+@RequestMapping("/servicename")
 @Slf4j
-public class EntityController {
+public class ServiceNameController {
 
     @Autowired
     private EntityService entityService ;
+
 
     @GetMapping("/{databaseName}/{serviceName}")
     public List<String> getServiceName (@PathVariable("databaseName") String databaseName,
@@ -30,4 +31,12 @@ public class EntityController {
         return serviceNames;
     }
 
+
+
+
+
+
+
 }
+
+
