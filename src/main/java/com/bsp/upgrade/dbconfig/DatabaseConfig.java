@@ -42,89 +42,31 @@ import java.util.HashMap;
 public class DatabaseConfig {
 
 
-    @Value("${spring.datasource.url}")
-    private String devurl = "jdbc:oracle:thin:@10.19.137.5:1521:ibblog";
 
-    @Value("${spring.datasource.url}")
-    private String stageurl = "jdbc:oracle:thin:@localhost:1521:iibdev";
-
-    @Value("${spring.datasource.url}")
-    private String produrl = "jdbc:oracle:thin:@localhost:1522:rmbprod";
-
-    @Value("${spring.datasource.username}")
-    private String devusername = "iibup";
-
-    @Value("${spring.datasource.username}")
-    private String stageusername = "iibqc";
-
-    @Value("${spring.datasource.username}")
-    private String produsername ="BSPREMEDYPROD";
-
-    @Value("${spring.datasource.password}")
-    private String devpassword = "iibup";
-
-    @Value("${spring.datasource.password}")
-    private String stagepassword = "iibqc";
-
-    @Value("${spring.datasource.password}")
-    private String prodpassword = "oracle_123";
-
-    @Value("${spring.datasource.driver-class-name}")
-    private String driverClassName = "oracle.jdbc.OracleDriver";
-
-
-    @Autowired
-    private Environment env;
     @Primary
     @Bean(name = "devDataSource")
-    @Profile("dev")
-    @ConfigurationProperties(prefix = "spring")
+    @ConfigurationProperties(prefix = "spring.datasource")
     public DataSource devDataSource() {
 
-
-        return DataSourceBuilder.create()
-                .driverClassName(driverClassName)
-                .url(devurl)
-                .username(devusername)
-                .password(devpassword)
-                .build();
-
-//        DriverManagerDataSource dataSource = new DriverManagerDataSource();
-//        dataSource.setDriverClassName("oracle.jdbc.OracleDriver");
-//        dataSource.setUrl(env.getProperty("oracle.datasource.url"));
-//        dataSource.setUsername(env.getProperty("oracle.datasource.username"));
-//        dataSource.setPassword(env.getProperty("oracle.datasource.password"));
-//        return dataSource;
+        return DataSourceBuilder.create().build();
     }
-    }
+
 
 
     @Primary
     @Bean(name = "stageDataSource")
-    @Profile("stage")
+    @ConfigurationProperties(prefix = "spring.datasource.stage11")
     public DataSource stageDataSource() {
 
-
-        return DataSourceBuilder.create()
-                .driverClassName(driverClassName)
-                .url(stageurl)
-                .username(stageusername)
-                .password(stagepassword)
-                .build();
+        return DataSourceBuilder.create().build();
 
     }
-
     @Primary
     @Bean(name = "prodDataSource")
-    @Profile("prod")
+    @ConfigurationProperties(prefix = "spring.datasource.prod11")
     public DataSource prodDataSource() {
 
-        return DataSourceBuilder.create()
-                .driverClassName(driverClassName)
-                .url(produrl)
-                .username(produsername)
-                .password(prodpassword)
-                .build();
+        return DataSourceBuilder.create().build();
 
     }
 
@@ -166,32 +108,11 @@ public class DatabaseConfig {
             @Qualifier("stageDataSource") DataSource stageDataSource,
             @Qualifier("prodDataSource") DataSource prodDataSource) {
 
-//        return builder
-//                .dataSource(devDataSource)
-//                .packages("com.bsp.upgrade.entity")
-//                .persistenceUnit("EsbServiceInf")
-//                .build();
-
-        LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
-        HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
-
-        if (env.getActiveProfiles()[0].equals("dev")) {
-            entityManagerFactoryBean.setDataSource(devDataSource);
-        } else if (env.getActiveProfiles()[0].equals("stage")) {
-            entityManagerFactoryBean.setDataSource(stageDataSource);
-        } else if (env.getActiveProfiles()[0].equals("prod")) {
-            entityManagerFactoryBean.setDataSource(prodDataSource);
-        }
-
-        entityManagerFactoryBean.setPackagesToScan("com.bsp.upgrade.entity");
-        entityManagerFactoryBean.setJpaVendorAdapter(vendorAdapter);
-        entityManagerFactoryBean.setPersistenceUnitName("EsbServiceInf");
-
-        HashMap<String, Object> properties = new HashMap<>();
-
-        entityManagerFactoryBean.setJpaPropertyMap(properties);
-
-        return entityManagerFactoryBean;
+        return builder
+                .dataSource(devDataSource)
+                .packages("com.bsp.upgrade.entity")
+                .persistenceUnit("EsbServiceInf")
+                .build();
     }
 
 
